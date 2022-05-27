@@ -1,9 +1,11 @@
 <script setup>
 import Cover from "./layout/Cover.vue";
+import OrderSection from "./layout/OrderSection.vue";
 </script>
 
 <template>
   <Cover />
+  <OrderSection />
 </template>
 
 <style lang="scss">
@@ -14,6 +16,10 @@ import Cover from "./layout/Cover.vue";
   padding: 0;
   box-sizing: border-box;
   font-family: "Montserrat", sans-serif;
+}
+
+body {
+  background-color: #d1f4f3;
 }
 
 .container {
@@ -32,14 +38,9 @@ import Cover from "./layout/Cover.vue";
   color: #fff;
   background-color: transparent;
 
-  &--second{
+  &--second {
     border: 2px solid #fff;
     border-radius: 10px;
   }
-}
-
-img{
-  max-width: 100%;
-  height: auto;
 }
 </style>
