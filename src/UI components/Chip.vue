@@ -37,6 +37,7 @@ defineProps({
 <style lang="scss" scoped>
 $primary-color: #559d99;
 .chip-wrap {
+  min-width: 100px;
   position: relative;
   text-align: center;
   padding: 0.8rem 1rem;

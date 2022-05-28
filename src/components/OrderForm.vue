@@ -1,9 +1,11 @@
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
+
 import TextField from "../UI components/TextField.vue";
 import CounterField from "../UI components/CounterField.vue";
 import RangeSlider from "../UI components/RangeSlider.vue";
 import ChipPicker from "../UI components/ChipPicker.vue";
+
 import { v4 as uuidv4 } from "uuid";
 
 defineProps({});
@@ -26,23 +28,23 @@ const order = ref({
   isNeedCut: false,
 });
 
-const test2 = ref([
-  "awdawd",
-  "awdawdawd1",
-  "awdawdawd2",
-  "awdawdawd3",
-  "awdawdawd4",
-  "awdawdawd5",
-  "awdawdawd6",
-  "awdawdawd7",
-  "awdawdawd8",
-]);
+const test2 = ref(["awdawd", "awdawdawd1", "awdawdawd2"]);
+
 const slider = ref(null);
 function setWeight(minVal, maxVal) {
   if (!slider.value) return;
 
   slider.value.setRange(minVal, maxVal);
 }
+
+const deliveryDates = Array.from({ length: 10 }, (_, i) => {
+  const currentDate = new Date();
+  currentDate.setDate(currentDate.getDate() + i);
+  return currentDate.toLocaleDateString("ru", {
+    month: "long",
+    day: "numeric",
+  });
+});
 </script>
 
 <template>
@@ -102,7 +104,7 @@ function setWeight(minVal, maxVal) {
 
       <ChipPicker
         label="Дата доставки"
-        :chips-value="test2"
+        :chips-value="deliveryDates"
         :name="'deliveryDate'"
         v-model="order.deliveryDate"
         class="order-step__row"

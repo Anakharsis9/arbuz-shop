@@ -47,6 +47,6 @@ defineProps({
 .chips-wrap {
   display: flex;
   align-items: center;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 </style>

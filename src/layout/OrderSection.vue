@@ -18,8 +18,5 @@ import OrderForm from "../components/OrderForm.vue";
   &__title {
     margin-top: 4rem;
   }
-
-  &__block {
-  }
 }
 </style>
