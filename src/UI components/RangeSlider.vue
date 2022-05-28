@@ -33,36 +33,27 @@ const right = computed(() => {
   return 100 - scale(props.modelValue[1], props.min, props.max, 0, 100);
 });
 
-function changeRange(event, index) {
-  const minMaxGap = 1;
-  const minVal = props.modelValue[0];
-  const maxVal = props.modelValue[1];
+const rangeMin = ref(null);
+const rangeMax = ref(null);
 
-  console.log("Calculate", maxVal - minVal);
-  if (maxVal - minVal < minMaxGap) {
-    console.log("Set");
-    if (index === 0) {
-      emits("update:modelValue", [maxVal - minMaxGap, props.modelValue[1]]);
-    } else {
-      emits("update:modelValue", [props.modelValue[0], minVal + minMaxGap]);
-    }
+function changeRange() {
+  if (!rangeMin || !rangeMax) return;
+
+  const gap = 1;
+  const minVal = parseInt(rangeMin.value.value);
+  const maxVal = parseInt(rangeMax.value.value);
+
+  if (maxVal - minVal >= gap) {
+    console.log([minVal, maxVal]);
+    emits("update:modelValue", [minVal, maxVal]);
   } else {
-    console.log("Call");
-    const temp = [...props.modelValue];
-    temp[index] = parseInt(event.target.value);
-    emits("update:modelValue", temp);
+    emits("update:modelValue", [maxVal - gap, minVal + gap]);
   }
 }
 
 function scale(num, in_min, in_max, out_min, out_max) {
   return ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 }
-</script>
-
-<script>
-export default {
-  inheritAttrs: false,
-};
 </script>
 
 <template>
@@ -75,7 +66,8 @@ export default {
     </div>
     <div class="range-input">
       <input
-        @input="changeRange($event, 0)"
+        ref="rangeMin"
+        @input="changeRange"
         :value="modelValue[0]"
         class="range-min"
         type="range"
@@ -84,7 +76,8 @@ export default {
         :step="step"
       />
       <input
-        @input="changeRange($event, 1)"
+        ref="rangeMax"
+        @input="changeRange"
         :value="modelValue[1]"
         class="range-max"
         type="range"
