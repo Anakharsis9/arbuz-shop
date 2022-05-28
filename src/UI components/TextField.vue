@@ -19,7 +19,7 @@ export default {
 
 <template>
   <div class="text-field-wrap">
-    <label v-if="label">{{ label }}</label>
+    <label v-if="label" class="label">{{ label }}</label>
     <input
       @input="$emit('update:modelValue', $event.target.value)"
       :value="modelValue"

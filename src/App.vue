@@ -35,7 +35,7 @@ body {
   color: #6d6d6d;
   font-size: 1rem;
   display: block;
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
 }
 
 .btn {
