@@ -18,16 +18,19 @@ defineProps({
 </script>
 
 <template>
-  <div class="chip-wrap">
-    {{ value }}
+  <div
+    :class="{ 'chip-wrap--selected': modelValue === value }"
+    class="chip-wrap"
+  >
     <input
       @change="$emit('update:modelValue', $event.target.value)"
       :modelValue="modelValue"
       :value="value"
+      :name="name"
       type="radio"
       class="chip__input"
-      :name="name"
     />
+    <label>{{ value }}</label>
   </div>
 </template>
 
@@ -37,9 +40,18 @@ $primary-color: #559d99;
   position: relative;
   text-align: center;
   padding: 0.8rem 1rem;
+  margin: 0.4rem 0.4rem;
+  color: $primary-color;
+
   border: 1px solid $primary-color;
   border-radius: 100px;
-  color: $primary-color;
+
+  transition: background-color 0.3s;
+
+  &--selected {
+    color: #fff;
+    background-color: $primary-color;
+  }
 }
 
 .chip__input {
@@ -49,11 +61,15 @@ $primary-color: #559d99;
 
   width: 100%;
   height: 100%;
+  cursor: pointer;
 
-  // -webkit-appearance: none;
-  // appearance: none;
+  -webkit-appearance: none;
+  appearance: none;
 
-  // background-color: #fff;
   margin: 0;
+
+  &:focus {
+    outline: none;
+  }
 }
 </style>

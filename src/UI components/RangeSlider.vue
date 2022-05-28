@@ -44,7 +44,6 @@ function changeRange() {
   const maxVal = parseInt(rangeMax.value.value);
 
   if (maxVal - minVal >= gap) {
-    console.log([minVal, maxVal]);
     emits("update:modelValue", [minVal, maxVal]);
   } else {
     emits("update:modelValue", [maxVal - gap, minVal + gap]);

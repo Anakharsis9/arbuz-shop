@@ -8,6 +8,18 @@ import ChipPicker from "../UI components/ChipPicker.vue";
 defineProps({});
 
 const test = ref([1, 10]);
+const test2 = ref([
+  "awdawd",
+  "awdawdawd1",
+  "awdawdawd2",
+  "awdawdawd3",
+  "awdawdawd4",
+  "awdawdawd5",
+  "awdawdawd6",
+  "awdawdawd7",
+  "awdawdawd8",
+]);
+const orderDate = ref("");
 </script>
 
 <template>
@@ -23,7 +35,11 @@ const test = ref([1, 10]);
         :max="35"
         :step="1"
       />
-      <ChipPicker />
+      <ChipPicker
+        :chips-value="test2"
+        :name="'orderDate'"
+        v-model="orderDate"
+      />
     </div>
   </form>
 </template>
