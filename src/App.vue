@@ -11,6 +11,9 @@ import OrderSection from "./layout/OrderSection.vue";
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;800&display=swap");
 
+$primary-color: #559d99;
+$primary-color--light: #61b3ae;
+
 * {
   margin: 0;
   padding: 0;
@@ -28,6 +31,13 @@ body {
   margin: 0 auto;
 }
 
+.label {
+  color: #6d6d6d;
+  font-size: 1rem;
+  display: block;
+  margin-bottom: 1rem;
+}
+
 .btn {
   border: none;
   outline: none;
@@ -37,10 +47,23 @@ body {
   font-weight: 600;
   color: #fff;
   background-color: transparent;
+  border-radius: 10px;
+
+  transition: background-color 0.3s;
+  cursor: pointer;
 
   &--second {
     border: 2px solid #fff;
-    border-radius: 10px;
+  }
+  &--main {
+    background-color: $primary-color;
+  }
+  &:hover {
+    background-color: $primary-color--light;
+  }
+  &--control {
+    padding: 0.8rem 1.2rem;
+    font-size: 1.2rem;
   }
 }
 </style>

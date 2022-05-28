@@ -67,14 +67,13 @@
   top: 25%;
   left: 0;
   min-height: 40%;
-  & img {
+  img {
     max-width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
   }
 }
-
 
 .logo-wrapper {
   &__img {
