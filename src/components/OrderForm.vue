@@ -115,8 +115,13 @@ function setWeight(minVal, maxVal) {
         class="order-step__row"
       />
       <div class="needCut-wrap order-step__row">
-        <input type="checkbox" v-model="order.isNeedCut" />
-        <label>Порезать дольками</label>
+        <input
+          type="checkbox"
+          v-model="order.isNeedCut"
+          class="checkbox"
+          id="needCutId"
+        />
+        <label for="needCutId">Порезать дольками (опционально)</label>
       </div>
     </div>
   </form>
@@ -158,5 +163,16 @@ function setWeight(minVal, maxVal) {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
   column-gap: 12px;
+}
+
+.needCut-wrap {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  width: 18px;
+  height: 18px;
+  margin-right: 10px;
 }
 </style>
