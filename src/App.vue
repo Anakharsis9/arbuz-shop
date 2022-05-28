@@ -32,7 +32,7 @@ body {
 }
 
 .label {
-  color: #6d6d6d;
+  color: #5a5959;
   font-size: 1rem;
   display: block;
   margin-bottom: 10px;

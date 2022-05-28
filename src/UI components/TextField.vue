@@ -5,7 +5,7 @@ defineProps({
     default: false,
   },
   modelValue: {
-    type: String,
+    type: [String, Number],
     default: "",
   },
 });
@@ -22,6 +22,7 @@ export default {
     <label v-if="label" class="label">{{ label }}</label>
     <input
       @input="$emit('update:modelValue', $event.target.value)"
+      @change="$emit('change:modelValue', $event.target.value)"
       :value="modelValue"
       type="text"
       v-bind="$attrs"
@@ -35,8 +36,14 @@ export default {
   flex-direction: column;
 
   input {
+    width: 100%;
     padding: 0.5rem 1rem;
     font-size: 1rem;
   }
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
 }
 </style>

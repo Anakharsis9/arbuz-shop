@@ -20,14 +20,6 @@ import OrderForm from "../components/OrderForm.vue";
   }
 
   &__block {
-    margin: 2rem 0;
-    background-color: #fff;
-    border-radius: 10px;
-    width: 100%;
-    padding: 1.8rem;
-
-    box-shadow: 0px 6px 14px -6px rgba(24, 39, 75, 0.12),
-      0px 10px 32px -4px rgba(24, 39, 75, 0.1);
   }
 }
 </style>

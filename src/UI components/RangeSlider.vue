@@ -22,6 +22,10 @@ const props = defineProps({
     type: Number,
     required: true,
   },
+  gap: {
+    type: Number,
+    default: 1,
+  },
 });
 
 const emits = defineEmits(["update:modelValue"]);
@@ -35,13 +39,11 @@ const right = computed(() => {
 
 const rangeMin = ref(null);
 const rangeMax = ref(null);
+const gap = props.gap;
 
-function changeRange() {
-  if (!rangeMin || !rangeMax) return;
-
-  const gap = 1;
-  const minVal = parseInt(rangeMin.value.value);
-  const maxVal = parseInt(rangeMax.value.value);
+function setRange(minVal, maxVal) {
+  if (props.min > minVal || minVal > props.max) return;
+  if (props.min > maxVal || maxVal > props.max) return;
 
   if (maxVal - minVal >= gap) {
     emits("update:modelValue", [minVal, maxVal]);
@@ -53,6 +55,10 @@ function changeRange() {
 function scale(num, in_min, in_max, out_min, out_max) {
   return ((num - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min;
 }
+
+defineExpose({
+  setRange,
+});
 </script>
 
 <template>
@@ -66,7 +72,7 @@ function scale(num, in_min, in_max, out_min, out_max) {
     <div class="range-input">
       <input
         ref="rangeMin"
-        @input="changeRange"
+        @input="setRange(+$event.target.value, modelValue[1])"
         :value="modelValue[0]"
         class="range-min"
         type="range"
@@ -76,7 +82,7 @@ function scale(num, in_min, in_max, out_min, out_max) {
       />
       <input
         ref="rangeMax"
-        @input="changeRange"
+        @input="setRange(modelValue[0], +$event.target.value)"
         :value="modelValue[1]"
         class="range-max"
         type="range"
