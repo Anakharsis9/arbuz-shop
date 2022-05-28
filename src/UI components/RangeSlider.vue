@@ -1,5 +1,5 @@
 <script setup>
-import { ref, useAttrs, computed } from "vue";
+import { ref, computed } from "vue";
 
 const props = defineProps({
   label: {
@@ -10,39 +10,47 @@ const props = defineProps({
     type: Array,
     default: [5, 15],
   },
+  min: {
+    type: Number,
+    required: true,
+  },
+  max: {
+    type: Number,
+    required: true,
+  },
+  step: {
+    type: Number,
+    required: true,
+  },
 });
 
 const emits = defineEmits(["update:modelValue"]);
-const attrs = useAttrs();
 
-const rangeMin = attrs.min;
-const rangeMax = attrs.max;
-
-let left = computed(() => {
-  return scale(props.modelValue[0], rangeMin, rangeMax, 0, 100);
+const left = computed(() => {
+  return scale(props.modelValue[0], props.min, props.max, 0, 100);
 });
-let right = computed(() => {
-  return 100 - scale(props.modelValue[1], rangeMin, rangeMax, 0, 100);
+const right = computed(() => {
+  return 100 - scale(props.modelValue[1], props.min, props.max, 0, 100);
 });
 
-function changeRange(event) {
+function changeRange(event, index) {
   const minMaxGap = 1;
-  let minVal = +props.modelValue[0];
-  let maxVal = +props.modelValue[1];
+  const minVal = props.modelValue[0];
+  const maxVal = props.modelValue[1];
 
+  console.log("Calculate", maxVal - minVal);
   if (maxVal - minVal < minMaxGap) {
-    if (event.target.className === "range-min") {
-      console.log([maxVal - minMaxGap, props.modelValue[1]]);
+    console.log("Set");
+    if (index === 0) {
       emits("update:modelValue", [maxVal - minMaxGap, props.modelValue[1]]);
     } else {
       emits("update:modelValue", [props.modelValue[0], minVal + minMaxGap]);
     }
   } else {
-    if (event.target.className === "range-min") {
-      emits("update:modelValue", [event.target.value, props.modelValue[1]]);
-    } else {
-      emits("update:modelValue", [props.modelValue[0], event.target.value]);
-    }
+    console.log("Call");
+    const temp = [...props.modelValue];
+    temp[index] = parseInt(event.target.value);
+    emits("update:modelValue", temp);
   }
 }
 
@@ -67,18 +75,22 @@ export default {
     </div>
     <div class="range-input">
       <input
-        @input="changeRange"
+        @input="changeRange($event, 0)"
         :value="modelValue[0]"
         class="range-min"
         type="range"
-        v-bind="$attrs"
+        :min="min"
+        :max="max"
+        :step="step"
       />
       <input
-        @input="changeRange"
+        @input="changeRange($event, 1)"
         :value="modelValue[1]"
         class="range-max"
         type="range"
-        v-bind="$attrs"
+        :min="min"
+        :max="max"
+        :step="step"
       />
     </div>
   </div>
