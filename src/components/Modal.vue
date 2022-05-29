@@ -1,7 +1,6 @@
 <script setup>
 defineProps({
   show: Boolean,
-  
 });
 const emits = defineEmits(["close"]);
 
@@ -28,7 +27,7 @@ function close() {
             @click="close"
             aria-label="Close Modal"
           >
-            X
+            <img src="@/assets/icons/close.svg" />
           </button>
         </header>
 
@@ -103,8 +102,12 @@ function close() {
   padding: 10px;
   cursor: pointer;
   font-weight: bold;
-  color: #585858;
+  color: #3b3b3b;
   background: transparent;
+
+  img{
+    width: 16px;
+  }
 }
 
 .modal-fade-enter,
