@@ -37,8 +37,8 @@
   overflow: hidden;
 
   @media (max-width: 576px) {
+    background-image: url("../assets/background576px.jpg");
     height: 70vh;
-    // background-position: 50% top;
   }
 
   &__header {
