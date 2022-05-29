@@ -4,10 +4,10 @@ import { ref, computed, onMounted, watch, reactive } from "vue";
 import useVuelidate from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
 
-import TextField from "../UI components/TextField.vue";
-import CounterField from "../UI components/CounterField.vue";
-import RangeSlider from "../UI components/RangeSlider.vue";
-import ChipPicker from "../UI components/ChipPicker.vue";
+import TextField from "./ui/TextField.vue";
+import CounterField from "./ui/CounterField.vue";
+import RangeSlider from "./ui/RangeSlider.vue";
+import ChipPicker from "./ui/ChipPicker.vue";
 
 import { v4 as uuidv4 } from "uuid";
 

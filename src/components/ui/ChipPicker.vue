@@ -1,6 +1,5 @@
 <script setup>
-import { ref } from "vue";
-import Chip from "../UI components/Chip.vue";
+import Chip from "./Chip.vue";
 
 defineProps({
   label: {
