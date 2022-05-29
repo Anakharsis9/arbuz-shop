@@ -1,5 +1,8 @@
 <script setup>
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onMounted, watch, reactive } from "vue";
+
+import useVuelidate from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
 
 import TextField from "../UI components/TextField.vue";
 import CounterField from "../UI components/CounterField.vue";
@@ -26,12 +29,12 @@ const deliveryDates = Array.from({ length: 10 }, (_, i) => {
   });
 });
 
-const order = ref({
+const order = reactive({
   orderId: uuidv4(),
   itemsCount: 0,
   weightRange: [5, 10],
   userInfo: {
-    phone: "+7",
+    phone: "",
     address: {
       street: "",
       apartment: "",
@@ -43,8 +46,39 @@ const order = ref({
   deliveryTime: "",
   isNeedCut: false,
 });
+
+const notZero = (value) => value > 0;
+const requiredMsg = "Поле не должно быть пустым";
+
+const rules = {
+  itemsCount: {
+    required,
+    notZero: {
+      $validator: notZero,
+      $message: "Минимум один арбуз",
+    },
+  },
+  userInfo: {
+    phone: {
+      required: helpers.withMessage(requiredMsg, required),
+    },
+    address: {
+      street: {
+        required: helpers.withMessage(requiredMsg, required),
+      },
+    },
+  },
+};
+
+const v$ = useVuelidate(rules, order);
+
+async function sendForm() {
+  const result = await v$.value.$validate();
+  console.log(result);
+}
+
 const deliveryTimeRanges = computed(() => {
-  if (order.value.deliveryDate === deliveryDates[0]) {
+  if (order.deliveryDate === deliveryDates[0]) {
     const currentDateHour = new Date().getHours();
     return getTimeRanges(currentDateHour + 2, 22, 2);
   }
@@ -52,11 +86,11 @@ const deliveryTimeRanges = computed(() => {
 });
 
 onMounted(() => {
-  order.value.deliveryTime = deliveryTimeRanges.value[0] ?? "";
+  order.deliveryTime = deliveryTimeRanges.value[0] ?? "";
 });
 
 watch(deliveryTimeRanges, () => {
-  order.value.deliveryTime = deliveryTimeRanges.value[0] ?? "";
+  order.deliveryTime = deliveryTimeRanges.value[0] ?? "";
 });
 
 function getTimeRanges(start, end, gap) {
@@ -73,7 +107,16 @@ function getTimeRanges(start, end, gap) {
   <form @submit.prevent="" action="submit" class="form">
     <div class="order-step">
       <h3 class="order-step__title">Шаг 1. Укажите количество арбузов</h3>
-      <CounterField v-model="order.itemsCount" class="order-step__row" />
+      <div class="form-group order-step__row">
+        <CounterField v-model="order.itemsCount" />
+        <div
+          class="input-errors"
+          v-for="error of v$.itemsCount.$errors"
+          :key="error.$uid"
+        >
+          <div class="error-msg">{{ error.$message }}</div>
+        </div>
+      </div>
       <div class="range-control">
         <label class="label">Укажите весовой диапазон</label>
         <div class="weight-input">
@@ -104,13 +147,33 @@ function getTimeRanges(start, end, gap) {
       <h3 class="order-step__title">Шаг 2. Укажите контакты</h3>
       <div class="second-step">
         <div class="user-info order-step__row">
-          <TextField
-            v-model="order.userInfo.phone"
-            label="Номер телефона"
-            type="tel"
-            v-maska="'+7 (###) ###-####'"
-          />
-          <TextField v-model="order.userInfo.address.street" label="Адрес" />
+          <div class="form-group">
+            <TextField
+              v-model="order.userInfo.phone"
+              label="Номер телефона*"
+              type="tel"
+              v-maska="'+7 (###) ###-####'"
+              placeholder="+7"
+            />
+            <div
+              class="input-errors"
+              v-for="error of v$.userInfo.phone.$errors"
+              :key="error.$uid"
+            >
+              <div class="error-msg">{{ error.$message }}</div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <TextField v-model="order.userInfo.address.street" label="Адрес*" />
+            <div
+              class="input-errors"
+              v-for="error of v$.userInfo.address.street.$errors"
+              :key="error.$uid"
+            >
+              <div class="error-msg">{{ error.$message }}</div>
+            </div>
+          </div>
         </div>
         <div class="address-details order-step__row">
           <TextField
@@ -152,6 +215,9 @@ function getTimeRanges(start, end, gap) {
         />
         <label for="needCutId">Порезать дольками (опционально)</label>
       </div>
+      <button @click.prevent="sendForm" class="btn btn--main">
+        Оформить заказ
+      </button>
     </div>
   </form>
 </template>
@@ -204,5 +270,12 @@ function getTimeRanges(start, end, gap) {
   width: 18px;
   height: 18px;
   margin-right: 10px;
+}
+
+.input-errors {
+  margin: 12px 0;
+  .error-msg {
+    color: red;
+  }
 }
 </style>
