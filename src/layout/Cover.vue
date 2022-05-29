@@ -70,8 +70,6 @@
 }
 
 .img-composition {
-  // position: relative;
-  // width: 500px;
   position: absolute;
   top: 25%;
   left: 0;
