@@ -3,6 +3,9 @@ import { ref, onMounted, watch, computed } from "vue";
 export const useOrderData = () => {
   const deliveryDates = Array.from({ length: 10 }, (_, i) => {
     const currentDate = new Date();
+    if (currentDate.getHours() > 18)
+      currentDate.setDate(currentDate.getDate() + 1);
+
     currentDate.setDate(currentDate.getDate() + i);
     return currentDate.toLocaleDateString("ru", {
       month: "long",
@@ -47,7 +50,8 @@ export const useOrderData = () => {
   const deliveryTimeRanges = computed(() => {
     if (order.value.deliveryDate === deliveryDates[0]) {
       const currentDateHour = new Date().getHours();
-      return getTimeRanges(currentDateHour + 2, 22, 2);
+      const start = currentDateHour > 8 ? currentDateHour + 2 : 10;
+      return getTimeRanges(start, 22, 2);
     }
     return getTimeRanges(9, 22, 2);
   });
