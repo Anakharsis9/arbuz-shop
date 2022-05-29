@@ -1,7 +1,11 @@
-# Vue 3 + Vite
+# Arbuz shop
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Live Demo [click me](https://anakharsis9.github.io/arbuz-shop/) 
 
-## Recommended IDE Setup
+Представьте, что компания Arbuz.kz решила запустить новый продукт – 
+онлайн-заказ арбузов с грядки у фермера.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar)
+## Stack
+
+- Vue 3
+- Sass
