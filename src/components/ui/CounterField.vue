@@ -18,24 +18,24 @@ const props = defineProps({
 
 const emits = defineEmits(["update:modelValue"]);
 
-let countValue = ref(props.modelValue);
+const countValue = ref(props.modelValue);
 
 function increaseValue() {
   if (props.modelValue >= props.maxValue)
     return emits("update:modelValue", props.maxValue);
 
-  countValue = props.modelValue;
-  countValue++;
-  emits("update:modelValue", countValue);
+  countValue.value = props.modelValue;
+  countValue.value++;
+  emits("update:modelValue", countValue.value);
 }
 
 function decreaseValue() {
   if (props.modelValue <= props.minValue)
     return emits("update:modelValue", props.minValue);
 
-  countValue = props.modelValue;
-  countValue--;
-  emits("update:modelValue", countValue);
+  countValue.value = props.modelValue;
+  countValue.value--;
+  emits("update:modelValue", countValue.value);
 }
 </script>
 
@@ -43,11 +43,19 @@ function decreaseValue() {
   <div class="counter-wrap">
     <label class="label"> от 1 до 3 штук</label>
     <div class="counter__controls">
-      <button @click="decreaseValue" class="btn btn--main btn--control">
+      <button
+        type="button"
+        @click="decreaseValue"
+        class="btn btn--main btn--control"
+      >
         -
       </button>
       <span class="counter__value">{{ modelValue }}</span>
-      <button @click="increaseValue" class="btn btn--main btn--control">
+      <button
+        type="button"
+        @click="increaseValue"
+        class="btn btn--main btn--control"
+      >
         +
       </button>
     </div>

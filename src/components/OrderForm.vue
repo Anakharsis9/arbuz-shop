@@ -1,17 +1,15 @@
 <script setup>
 import { ref, computed, onMounted, watch, reactive } from "vue";
-
+import { v4 as uuidv4 } from "uuid";
 import useVuelidate from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
 
+import { createOrder } from "../api";
 import TextField from "./ui/TextField.vue";
 import CounterField from "./ui/CounterField.vue";
 import RangeSlider from "./ui/RangeSlider.vue";
 import ChipPicker from "./ui/ChipPicker.vue";
-
-import { v4 as uuidv4 } from "uuid";
-
-defineProps({});
+import Modal from "./Modal.vue";
 
 const slider = ref(null);
 function setWeight(minVal, maxVal) {
@@ -30,7 +28,6 @@ const deliveryDates = Array.from({ length: 10 }, (_, i) => {
 });
 
 const order = reactive({
-  orderId: uuidv4(),
   itemsCount: 0,
   weightRange: [5, 10],
   userInfo: {
@@ -72,11 +69,6 @@ const rules = {
 
 const v$ = useVuelidate(rules, order);
 
-async function sendForm() {
-  const result = await v$.value.$validate();
-  console.log(result);
-}
-
 const deliveryTimeRanges = computed(() => {
   if (order.deliveryDate === deliveryDates[0]) {
     const currentDateHour = new Date().getHours();
@@ -101,10 +93,69 @@ function getTimeRanges(start, end, gap) {
   }
   return result;
 }
+
+const isLoading = ref(false);
+const showModal = ref(false);
+const responseStatus = ref(0);
+
+async function sendForm() {
+  const result = await v$.value.$validate();
+  if (!result) return;
+
+  isLoading.value = true;
+  showModal.value = true;
+
+  const { status } = await createOrder({ id: uuidv4(), ...order });
+  responseStatus.value = status;
+
+  if (status === 200) {
+    order.itemsCount = 0;
+    order.weightRange = [5, 10];
+
+    order.userInfo.phone = "";
+
+    order.userInfo.address.street = "";
+    order.userInfo.address.apartment = "";
+    order.userInfo.address.floor = "";
+    order.userInfo.address.doorPhone = "";
+
+    order.deliveryDate = deliveryDates[0];
+    order.deliveryTime = "";
+    order.isNeedCut = false;
+    v$.value.$reset();
+  }
+
+  isLoading.value = false;
+}
 </script>
 
 <template>
-  <form @submit.prevent="" action="submit" class="form">
+  <modal v-show="showModal" @close="showModal = false">
+    <template v-slot:body>
+      <div v-if="isLoading" class="loader response">
+        <div class="lds-ellipsis">
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <div
+        v-if="!isLoading && responseStatus === 200"
+        class="response response--success"
+      >
+        Ура! Заказ оформлен, ожидайте доставку!
+      </div>
+      <div
+        v-if="!isLoading && responseStatus === 400"
+        class="response response--reject"
+      >
+        К сожалению, арбузов по вашему запросу не нашлось.
+      </div>
+    </template>
+  </modal>
+
+  <form @submit.prevent="sendForm" action="submit" class="form">
     <div class="order-step">
       <h3 class="order-step__title">Шаг 1. Укажите количество арбузов</h3>
       <div class="form-group order-step__row">
@@ -137,7 +188,7 @@ function getTimeRanges(start, end, gap) {
           ref="slider"
           v-model="order.weightRange"
           :min="1"
-          :max="35"
+          :max="15"
           :step="1"
           :gap="1"
         />
@@ -215,14 +266,13 @@ function getTimeRanges(start, end, gap) {
         />
         <label for="needCutId">Порезать дольками (опционально)</label>
       </div>
-      <button @click.prevent="sendForm" class="btn btn--main">
-        Оформить заказ
-      </button>
+      <button type="submit" class="btn btn--main">Оформить заказ</button>
     </div>
   </form>
 </template>
 
 <style lang="scss" scoped>
+$primary-color: #559d99;
 .order-step {
   margin: 2rem 0;
   background-color: #fff;
@@ -276,6 +326,66 @@ function getTimeRanges(start, end, gap) {
   margin: 12px 0;
   .error-msg {
     color: red;
+  }
+}
+
+.response {
+  font-size: 1.1rem;
+  text-align: center;
+}
+.lds-ellipsis {
+  display: inline-block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+}
+.lds-ellipsis div {
+  position: absolute;
+  top: 33px;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: $primary-color;
+  animation-timing-function: cubic-bezier(0, 1, 1, 0);
+}
+.lds-ellipsis div:nth-child(1) {
+  left: 8px;
+  animation: lds-ellipsis1 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(2) {
+  left: 8px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(3) {
+  left: 32px;
+  animation: lds-ellipsis2 0.6s infinite;
+}
+.lds-ellipsis div:nth-child(4) {
+  left: 56px;
+  animation: lds-ellipsis3 0.6s infinite;
+}
+@keyframes lds-ellipsis1 {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+@keyframes lds-ellipsis3 {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0);
+  }
+}
+@keyframes lds-ellipsis2 {
+  0% {
+    transform: translate(0, 0);
+  }
+  100% {
+    transform: translate(24px, 0);
   }
 }
 </style>
