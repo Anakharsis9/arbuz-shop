@@ -1,5 +1,5 @@
 <script setup>
-import OrderForm from "@/components/OrderForm.vue";
+import OrderForm from "@/components/order-form/OrderForm.vue";
 </script>
 
 <template>

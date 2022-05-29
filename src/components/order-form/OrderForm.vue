@@ -1,15 +1,17 @@
 <script setup>
-import { ref, computed, onMounted, watch, reactive } from "vue";
+import { ref } from "vue";
 import { v4 as uuidv4 } from "uuid";
-import useVuelidate from "@vuelidate/core";
-import { required, helpers } from "@vuelidate/validators";
 
-import { createOrder } from "../api";
-import TextField from "./ui/TextField.vue";
-import CounterField from "./ui/CounterField.vue";
-import RangeSlider from "./ui/RangeSlider.vue";
-import ChipPicker from "./ui/ChipPicker.vue";
-import Modal from "./Modal.vue";
+import { createOrder } from "@/api";
+
+import TextField from "../ui/TextField.vue";
+import CounterField from "../ui/CounterField.vue";
+import RangeSlider from "../ui/RangeSlider.vue";
+import ChipPicker from "../ui/ChipPicker.vue";
+import Modal from "../Modal.vue";
+
+import { useOrderValidators } from "./useOrderValidators";
+import { useOrderData } from "./useOrderData";
 
 const slider = ref(null);
 function setWeight(minVal, maxVal) {
@@ -18,81 +20,9 @@ function setWeight(minVal, maxVal) {
   slider.value.setRange(minVal, maxVal);
 }
 
-const deliveryDates = Array.from({ length: 10 }, (_, i) => {
-  const currentDate = new Date();
-  currentDate.setDate(currentDate.getDate() + i);
-  return currentDate.toLocaleDateString("ru", {
-    month: "long",
-    day: "numeric",
-  });
-});
-
-const order = reactive({
-  itemsCount: 0,
-  weightRange: [5, 10],
-  userInfo: {
-    phone: "",
-    address: {
-      street: "",
-      apartment: "",
-      floor: "",
-      doorPhone: "",
-    },
-  },
-  deliveryDate: deliveryDates[0],
-  deliveryTime: "",
-  isNeedCut: false,
-});
-
-const notZero = (value) => value > 0;
-const requiredMsg = "Поле не должно быть пустым";
-
-const rules = {
-  itemsCount: {
-    required,
-    notZero: {
-      $validator: notZero,
-      $message: "Минимум один арбуз",
-    },
-  },
-  userInfo: {
-    phone: {
-      required: helpers.withMessage(requiredMsg, required),
-    },
-    address: {
-      street: {
-        required: helpers.withMessage(requiredMsg, required),
-      },
-    },
-  },
-};
-
-const v$ = useVuelidate(rules, order);
-
-const deliveryTimeRanges = computed(() => {
-  if (order.deliveryDate === deliveryDates[0]) {
-    const currentDateHour = new Date().getHours();
-    return getTimeRanges(currentDateHour + 2, 22, 2);
-  }
-  return getTimeRanges(9, 22, 2);
-});
-
-onMounted(() => {
-  order.deliveryTime = deliveryTimeRanges.value[0] ?? "";
-});
-
-watch(deliveryTimeRanges, () => {
-  order.deliveryTime = deliveryTimeRanges.value[0] ?? "";
-});
-
-function getTimeRanges(start, end, gap) {
-  const result = [];
-  for (let i = start; i <= end - gap; i++) {
-    const timeRange = `${i}:00 - ${i + gap}:00`;
-    result.push(timeRange);
-  }
-  return result;
-}
+const { deliveryDates, deliveryTimeRanges, order, resetOrderData } =
+  useOrderData();
+const { v$ } = useOrderValidators(order.value);
 
 const isLoading = ref(false);
 const showModal = ref(false);
@@ -105,23 +35,11 @@ async function sendForm() {
   isLoading.value = true;
   showModal.value = true;
 
-  const { status } = await createOrder({ id: uuidv4(), ...order });
+  const { status } = await createOrder({ id: uuidv4(), ...order.value });
   responseStatus.value = status;
 
   if (status === 200) {
-    order.itemsCount = 0;
-    order.weightRange = [5, 10];
-
-    order.userInfo.phone = "";
-
-    order.userInfo.address.street = "";
-    order.userInfo.address.apartment = "";
-    order.userInfo.address.floor = "";
-    order.userInfo.address.doorPhone = "";
-
-    order.deliveryDate = deliveryDates[0];
-    order.deliveryTime = "";
-    order.isNeedCut = false;
+    resetOrderData();
     v$.value.$reset();
   }
 
