@@ -48,7 +48,10 @@ function setRange(minVal, maxVal) {
   if (maxVal - minVal >= gap) {
     emits("update:modelValue", [minVal, maxVal]);
   } else {
-    emits("update:modelValue", [maxVal - gap, minVal + gap]);
+    emits("update:modelValue", [
+      maxVal - gap < props.min ? props.min : maxVal - gap,
+      minVal + gap > props.max ? props.max : minVal + gap,
+    ]);
   }
 }
 

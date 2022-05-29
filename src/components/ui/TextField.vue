@@ -26,6 +26,7 @@ export default {
       :value="modelValue"
       type="text"
       v-bind="$attrs"
+      @keyup.enter.prevent=""
     />
   </div>
 </template>
