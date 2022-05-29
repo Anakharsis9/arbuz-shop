@@ -95,9 +95,6 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
-$primary-color: #559d99;
-$primary-color--light: #61b3ae;
-
 @mixin thumb() {
   height: 17px;
   width: 17px;

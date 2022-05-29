@@ -5,11 +5,7 @@
     <div class="container">
       <header class="cover__header">
         <div class="logo-wrapper">
-          <img
-            class="logo-wrapper__img"
-            src="../assets/logo.png"
-            alt="logo"
-          />
+          <img class="logo-wrapper__img" src="@/assets/logo.png" alt="logo" />
         </div>
         <a href="#order-section" class="btn btn--main">Заказать онлайн</a>
       </header>
@@ -18,7 +14,7 @@
       </h1>
       <div class="img-composition">
         <img
-          src="../assets/watermelon-in-clouds.png"
+          src="@/assets/watermelon-in-clouds.png"
           alt="watermelon in clouds"
         />
       </div>
@@ -28,7 +24,7 @@
 
 <style lang="scss" scoped>
 .cover {
-  background-image: url("../assets/background.jpg");
+  background-image: url("@/assets/background.jpg");
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
@@ -37,7 +33,7 @@
   overflow: hidden;
 
   @media (max-width: 576px) {
-    background-image: url("../assets/background576px.jpg");
+    background-image: url("@/assets/background576px.jpg");
     height: 70vh;
   }
 

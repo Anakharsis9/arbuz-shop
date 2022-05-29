@@ -11,9 +11,6 @@ import OrderSection from "./layout/OrderSection.vue";
 <style lang="scss">
 @import url("https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;800&display=swap");
 
-$primary-color: #559d99;
-$primary-color--light: #61b3ae;
-
 * {
   margin: 0;
   padding: 0;

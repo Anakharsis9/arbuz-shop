@@ -272,7 +272,6 @@ async function sendForm() {
 </template>
 
 <style lang="scss" scoped>
-$primary-color: #559d99;
 .order-step {
   margin: 2rem 0;
   background-color: #fff;
