@@ -7,7 +7,7 @@
         <div class="logo-wrapper">
           <img
             class="logo-wrapper__img"
-            src="src/assets/logo 1.png"
+            src="../assets/logo.png"
             alt="logo"
           />
         </div>
@@ -18,7 +18,7 @@
       </h1>
       <div class="img-composition">
         <img
-          src="src/assets/watermelon in clouds.png"
+          src="../assets/watermelon-in-clouds.png"
           alt="watermelon in clouds"
         />
       </div>
@@ -28,7 +28,7 @@
 
 <style lang="scss" scoped>
 .cover {
-  background-image: url("src/assets/background1.jpg");
+  background-image: url("../assets/background.jpg");
   background-repeat: no-repeat;
   background-position: 50% 50%;
   background-size: cover;
