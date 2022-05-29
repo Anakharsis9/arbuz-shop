@@ -31,7 +31,7 @@ const order = ref({
   itemsCount: 0,
   weightRange: [5, 10],
   userInfo: {
-    phone: "",
+    phone: "+7",
     address: {
       street: "",
       apartment: "",
@@ -104,7 +104,12 @@ function getTimeRanges(start, end, gap) {
       <h3 class="order-step__title">Шаг 2. Укажите контакты</h3>
       <div class="second-step">
         <div class="user-info order-step__row">
-          <TextField v-model="order.userInfo.phone" label="Номер телефона" />
+          <TextField
+            v-model="order.userInfo.phone"
+            label="Номер телефона"
+            type="tel"
+            v-maska="'+7 (###) ###-####'"
+          />
           <TextField v-model="order.userInfo.address.street" label="Адрес" />
         </div>
         <div class="address-details order-step__row">
