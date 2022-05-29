@@ -3,7 +3,7 @@ import OrderForm from "../components/OrderForm.vue";
 </script>
 
 <template>
-  <section class="order-section">
+  <section class="order-section" id="order-section">
     <div class="container">
       <h2 class="order-section__title">Заказать онлайн</h2>
       <div class="order-section__block">
@@ -17,6 +17,11 @@ import OrderForm from "../components/OrderForm.vue";
 .order-section {
   &__title {
     margin-top: 4rem;
+  }
+  &__block {
+    @media (max-width: 576px) {
+      margin: 0 -15px;
+    }
   }
 }
 </style>

@@ -21,6 +21,10 @@ $primary-color--light: #61b3ae;
   font-family: "Montserrat", sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: #d1f4f3;
 }
@@ -29,6 +33,9 @@ body {
   max-width: 1140px;
   padding: 0 15px;
   margin: 0 auto;
+
+  @media (max-width: 576px) {
+  }
 }
 
 .label {
@@ -53,7 +60,8 @@ body {
   cursor: pointer;
 
   &--second {
-    border: 2px solid #fff;
+    border: 2px solid $primary-color;
+    color: $primary-color;
   }
   &--main {
     background-color: $primary-color;

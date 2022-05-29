@@ -286,6 +286,9 @@ $primary-color: #559d99;
   &__row {
     margin: 1.5rem 0;
   }
+  @media (max-width: 576px) {
+    padding: 1rem;
+  }
 }
 .range-control {
   max-width: 320px;

@@ -7,25 +7,16 @@
         <div class="logo-wrapper">
           <img
             class="logo-wrapper__img"
-            src="src/assets/logo white.png"
-            alt="logo-white"
+            src="src/assets/logo 1.png"
+            alt="logo"
           />
         </div>
-        <button class="btn btn--second">Заказать онлайн</button>
+        <a href="#order-section" class="btn btn--main">Заказать онлайн</a>
       </header>
       <h1 class="cover__title">
         Сочный Арбуз прямо с&nbsp;грядки у&nbsp;фермера
       </h1>
       <div class="img-composition">
-        <!-- <div class="cloud-image cloud-image--left">
-          <img src="src/assets/cloud1.png" alt="cloud1" />
-        </div>
-        <div class="watermelon-image">
-          <img src="src/assets/watermelon с долками 1.png" alt="watermelon" />
-        </div>
-        <div class="cloud-image cloud-image--right">
-          <img src="src/assets/cloud2.png" alt="cloud2" />
-        </div> -->
         <img
           src="src/assets/watermelon in clouds.png"
           alt="watermelon in clouds"
@@ -37,13 +28,18 @@
 
 <style lang="scss" scoped>
 .cover {
-  background-image: url("src/assets/background.jpg");
+  background-image: url("src/assets/background1.jpg");
   background-repeat: no-repeat;
-  background-position: 50% 20%;
+  background-position: 50% 50%;
   background-size: cover;
   height: 90vh;
 
   overflow: hidden;
+
+  @media (max-width: 576px) {
+    height: 70vh;
+    // background-position: 50% top;
+  }
 
   &__header {
     display: flex;
@@ -56,7 +52,20 @@
     margin-top: 3rem;
     width: 80%;
     font-size: 4rem;
-    color: #184604;
+    color: #165e00;
+
+    @media (max-width: 768px) {
+      width: 100%;
+      font-size: 4rem;
+    }
+    @media (max-width: 576px) {
+      width: 100%;
+      font-size: 2.5rem;
+    }
+  }
+
+  a {
+    text-decoration: none;
   }
 }
 
@@ -67,11 +76,33 @@
   top: 25%;
   left: 0;
   min-height: 40%;
+
   img {
     max-width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
+  }
+
+  @media (max-width: 1600px) {
+    top: 30%;
+    height: 400px;
+    min-height: 30%;
+  }
+  @media (max-width: 992px) {
+    top: 35%;
+    height: 350px;
+    min-height: 40%;
+  }
+  @media (max-width: 768px) {
+    top: 40%;
+    height: 300px;
+    min-height: 40%;
+  }
+  @media (max-width: 576px) {
+    top: 30%;
+    height: 100px;
+    min-height: 30%;
   }
 }
 
