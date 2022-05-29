@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 
 import TextField from "../UI components/TextField.vue";
 import CounterField from "../UI components/CounterField.vue";
@@ -9,26 +9,6 @@ import ChipPicker from "../UI components/ChipPicker.vue";
 import { v4 as uuidv4 } from "uuid";
 
 defineProps({});
-
-const order = ref({
-  orderId: uuidv4(),
-  itemsCount: 0,
-  weightRange: [5, 10],
-  userInfo: {
-    phone: "",
-    address: {
-      street: "",
-      apartment: "",
-      floor: "",
-      doorPhone: "",
-    },
-  },
-  deliveryDate: "",
-  deliveryTime: "",
-  isNeedCut: false,
-});
-
-const test2 = ref(["awdawd", "awdawdawd1", "awdawdawd2"]);
 
 const slider = ref(null);
 function setWeight(minVal, maxVal) {
@@ -45,6 +25,48 @@ const deliveryDates = Array.from({ length: 10 }, (_, i) => {
     day: "numeric",
   });
 });
+
+const order = ref({
+  orderId: uuidv4(),
+  itemsCount: 0,
+  weightRange: [5, 10],
+  userInfo: {
+    phone: "",
+    address: {
+      street: "",
+      apartment: "",
+      floor: "",
+      doorPhone: "",
+    },
+  },
+  deliveryDate: deliveryDates[0],
+  deliveryTime: "",
+  isNeedCut: false,
+});
+const deliveryTimeRanges = computed(() => {
+  if (order.value.deliveryDate === deliveryDates[0]) {
+    const currentDateHour = new Date().getHours();
+    return getTimeRanges(currentDateHour + 2, 22, 2);
+  }
+  return getTimeRanges(9, 22, 2);
+});
+
+onMounted(() => {
+  order.value.deliveryTime = deliveryTimeRanges.value[0] ?? "";
+});
+
+watch(deliveryTimeRanges, () => {
+  order.value.deliveryTime = deliveryTimeRanges.value[0] ?? "";
+});
+
+function getTimeRanges(start, end, gap) {
+  const result = [];
+  for (let i = start; i <= end - gap; i++) {
+    const timeRange = `${i}:00 - ${i + gap}:00`;
+    result.push(timeRange);
+  }
+  return result;
+}
 </script>
 
 <template>
@@ -111,12 +133,12 @@ const deliveryDates = Array.from({ length: 10 }, (_, i) => {
       />
       <ChipPicker
         label="Время доставки"
-        :chips-value="test2"
+        :chips-value="deliveryTimeRanges"
         :name="'deliveryTime'"
         v-model="order.deliveryTime"
         class="order-step__row"
       />
-      <div class="needCut-wrap order-step__row">
+      <div class="needCut-wrap">
         <input
           type="checkbox"
           v-model="order.isNeedCut"
@@ -168,6 +190,7 @@ const deliveryDates = Array.from({ length: 10 }, (_, i) => {
 }
 
 .needCut-wrap {
+  margin: 2rem 0;
   display: flex;
   align-items: center;
 }

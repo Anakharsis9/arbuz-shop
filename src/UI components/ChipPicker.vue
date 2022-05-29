@@ -25,7 +25,7 @@ defineProps({
 <template>
   <div class="chipPicker-wrap">
     <label v-if="label" class="label">{{ label }}</label>
-    <div class="chips-wrap">
+    <div v-if="chipsValue.length > 0" class="chips-wrap">
       <Chip
         v-for="(chip, idx) in chipsValue"
         :key="idx"
@@ -35,18 +35,15 @@ defineProps({
         @click="$emit('update:modelValue', $event.target.value)"
       />
     </div>
+    <span v-else>Рабочее время доставки окончено</span>
   </div>
 </template>
 
 <style lang="scss" scoped>
-.chipPicker-wrap {
-  display: flex;
-  flex-direction: column;
-}
-
 .chips-wrap {
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-auto-flow: column;
+  column-gap: 12px;
   overflow-x: auto;
 }
 </style>
