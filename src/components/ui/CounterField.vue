@@ -1,6 +1,4 @@
 <script setup>
-import { ref } from "vue";
-
 const props = defineProps({
   modelValue: {
     type: Number,
@@ -18,24 +16,13 @@ const props = defineProps({
 
 const emits = defineEmits(["update:modelValue"]);
 
-const countValue = ref(props.modelValue);
-
-function increaseValue() {
-  if (props.modelValue >= props.maxValue)
+function updateValue(direction) {
+  if (direction > 0 && props.modelValue >= props.maxValue)
     return emits("update:modelValue", props.maxValue);
-
-  countValue.value = props.modelValue;
-  countValue.value++;
-  emits("update:modelValue", countValue.value);
-}
-
-function decreaseValue() {
-  if (props.modelValue <= props.minValue)
+  if (direction < 0 && props.modelValue <= props.minValue)
     return emits("update:modelValue", props.minValue);
 
-  countValue.value = props.modelValue;
-  countValue.value--;
-  emits("update:modelValue", countValue.value);
+  emits("update:modelValue", props.modelValue + direction);
 }
 </script>
 
@@ -45,7 +32,7 @@ function decreaseValue() {
     <div class="counter__controls">
       <button
         type="button"
-        @click="decreaseValue"
+        @click="updateValue(-1)"
         class="btn btn--main btn--control"
       >
         -
@@ -53,7 +40,7 @@ function decreaseValue() {
       <span class="counter__value">{{ modelValue }}</span>
       <button
         type="button"
-        @click="increaseValue"
+        @click="updateValue(1)"
         class="btn btn--main btn--control"
       >
         +
